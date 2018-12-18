@@ -12,7 +12,7 @@ A set of scripts and instruction files to reproduce SCM model published in 10.21
  - GNU make (tested with 4.2.1)
  - GNU plot (tested with v 5.0 patchlevel 6)
  - PHREEQC (tested with 3.3.3-10424-x64)
- - R (tested with 3.4.3)
+ - R (tested with 3.4.3) -- is used to generate dynamic PHREEQC input files but can be replaced with Python
 
 # Usage
 
