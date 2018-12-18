@@ -12,10 +12,11 @@ A set of scripts and instruction files to reproduce SCM model published in 10.21
  - GNU make (tested with 4.2.1)
  - GNU plot (tested with v 5.0 patchlevel 6)
  - PHREEQC (tested with 3.3.3-10424-x64)
+ - R (tested with 3.4.3)
 
 # Usage
 
-In order to reproduce SCM figure from the manuscript in png format: 
+In order to reproduce SCM figure from the manuscript in png format:
 1) Update PHREEQC_BIN and DATABASE_PATH variable according to your environment
 2) From bash (cygwin terminal) run ```make -f SCM.make graph_all.svg convert_png```
 
