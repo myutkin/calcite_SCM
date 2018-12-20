@@ -1,7 +1,7 @@
 set datafile separator "\t"
 set encoding utf8
 set minussign
-set terminal svg enhanced font "Times New Roman,18"
+set terminal svg enhanced font "Times New Roman,28" size 1024,768
 
 #set format y "%2.1t×10^{%L}"
 
