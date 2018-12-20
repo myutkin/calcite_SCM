@@ -120,8 +120,12 @@ def even_mask(data, index):
 
 data_bulk = pd.read_csv(filename + '.tsv', sep="\t")
 # we take every 4th line!! it may look like it is doing exactly otherwise, but since nuberimg start from 0 in python ...
-data_bulk_even = data_bulk.loc[even_mask(data_bulk, 4),]
+# data_bulk_even = data_bulk.loc[even_mask(data_bulk, 4),]
+# I optimized the algorithm, and now, no need to take every 4th line, only start from 1st not 0
+data_bulk_even = data_bulk.loc[1:,]
+#data_bulk_even = data_bulk
 
+# m_CO2 m_H2CO3 m_HCO3- m_CO3-2 m_H+ m_OH- m_Ca+2 m_Na+ m_Cl- pH
 data_reshaped = data_bulk_even.iloc[:,[10,11,9,8,3,4,5,12,13]]
 
 # data_reshaped
@@ -161,21 +165,24 @@ def NR(concentrations, guess, iter, err):
     n = 0
     
     for i in range(iter):
-        dFdxevalxi = np.matrix(Jac(*guess))  # %dFdx(xi); Jacobian evaluated at xi
-        eqevalxi = Funct(*guess)# %F(xi); function F evaluated at xi
-        guess = np.dot(-np.linalg.inv(dFdxevalxi),eqevalxi) + guess
-        # need toconvert to the right type to feed in next iter
-        guess = np.array(guess).reshape(-1)
-    
-        # Error calc
-        error = np.sqrt(np.dot(np.transpose(eqevalxi),eqevalxi))
-        # Iter counter
-        n = n + 1
-        if error < err:
-            print('Equation Solved')
-            print(error)
-            print(n)
-            break
+        try:
+            dFdxevalxi = np.matrix(Jac(*guess))  # %dFdx(xi); Jacobian evaluated at xi
+            eqevalxi = Funct(*guess)# %F(xi); function F evaluated at xi
+            guess = np.dot(-np.linalg.inv(dFdxevalxi),eqevalxi) + guess
+            # need toconvert to the right type to feed in next iter
+            guess = np.array(guess).reshape(-1)
+            
+            # Error calc
+            error = np.sqrt(np.dot(np.transpose(eqevalxi),eqevalxi))
+            # Iter counter
+            n = n + 1
+            if np.real(error) < err:
+                print('Equation Solved')
+                print(error)
+                print(n)
+                break
+        except:
+            pass
     return [guess, error, n]
 
 data_input = data_reshaped.values
@@ -213,6 +220,7 @@ data_iter = pd.Series(iter_all, name = 'Iterations')
 
 data_calc_export = data_surf.join([data_err, data_iter])
 
+data_reshaped = data_bulk_even.iloc[:,[10,11,9,8,3,4,5,12,13,0,1]]
 data_reshaped = data_reshaped.reset_index(drop=True)
 data_export = data_reshaped.join(data_calc_export)
 
